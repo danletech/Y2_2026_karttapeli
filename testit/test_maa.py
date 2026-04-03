@@ -5,17 +5,17 @@ import unittest
 class TestMaa(unittest.TestCase): #perintä kopioitu kierrokselta 6 t. 5
 
     def setUp(self): #lähde https://realpython.com/python-unittest/
-        # luodaan jokin testiolio, olkoot suomi (tiedot karkeita ja kirjoitettu vain testejä varten)
+        # Luodaan jokin testiolio, olkoot suomi (tiedot karkeita ja kirjoitettu vain testejä varten)
         self.testiolio = Maa(
-            name = "Finland",
+            nimi = "Finland",
             iso3166 = "FI",
-            capital = "Helsinki",
-            population = 5500000,
-            area = 338000,
-            languages = ["Finnish", "Swedish"],
-            independence_year = "6.12.1917",
-            neighbouring_countries = ["Norway", "Sweden", "Russia"],
-            hints = ["Europe", "Helsinki", "kielet", "naapurit", "F"]
+            paakaupunki = "Helsinki",
+            populaatio = 5500000,
+            pinta_ala = 338000,
+            kielet = ["Finnish", "Swedish"],
+            itsenaisyysvuosi = "6.12.1917",
+            naapurimaat = ["Norway", "Sweden", "Russia"],
+            vihjeet = ["Europe", "Helsinki", "kielet", "naapurit", "F"]
         )
 
     def test_is_the_guess_right_toimii_pienilla_kirjaimilla(self):

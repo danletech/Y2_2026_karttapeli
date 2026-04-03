@@ -1,103 +1,87 @@
-from maiden_tiedot_parser import kaikkien_maiden_data
 
 class Maa:
-    def __init__(self, name, iso3166, continent, capital, population, area, languages, independence_year, neighbouring_countries ,hints):
-        self.name = name
+    def __init__(self, nimi, iso3166, maanosa, paakaupunki, populaatio, pinta_ala, kielet, itsenaisyysvuosi, naapurimaat, vihjeet):
+        self.nimi = nimi
         self.iso3166 = iso3166
-        self.continent = continent
-        self.capital = capital
-        self.population = population
-        self.area = area
-        self.languages = languages #tämä on lista, joka sisältää kaikki maan viralliset kielet
-        self.independence_year = independence_year
-        self.neighbouring_countries = neighbouring_countries #tämäkin on lista, joka sisältää kaikki naapurimaat
-        self.hints = hints #tämäkin on lista, joka sisältää kaikki vihjeet tietyssä järjestyksessä
+        self.maanosa = maanosa
+        self.paakaupunki = paakaupunki
+        self.populaatio = populaatio
+        self.pinta_ala = pinta_ala
+        self.kielet = kielet #tämä on lista, joka sisältää kaikki maan viralliset kielet
+        self.itsenaisyysvuosi = itsenaisyysvuosi
+        self.naapurimaat = naapurimaat #tämäkin on lista, joka sisältää kaikki naapurimaat
+        self.vihjeet = vihjeet #tämäkin on lista, joka sisältää kaikki vihjeet tietyssä järjestyksessä
 
-    def get_name(self):
-        return self.name
+    def hae_nimi(self):
+        return self.nimi
 
-    def get_iso3166(self):
+    def hae_iso(self):
         return self.iso3166
 
-    def get_capital(self):
-        return self.capital
+    def hae_paakaupunki(self):
+        return self.paakaupunki
 
-    def get_population(self):
-        return self.population
+    def hae_populaatio(self):
+        return self.populaatio
 
-    def get_area(self):
-        return self.area
+    def hae_pinta_ala(self):
+        return self.pinta_ala
 
-    def get_languages(self):
-        return self.languages
+    def hae_kielet(self):
+        return self.kielet
 
-    def get_independence_day(self):
-        return self.independence_year
+    def hae_itsenaisyyspaiva(self):
+        return self.itsenaisyysvuosi
 
-    def get_hints(self):
-        return self.hints
+    def hae_vihjeet(self):
+        return self.vihjeet
 
-    def get_neighbouring_countries(self):
-        return self.neighbouring_countries
+    def hae_naapurimaat(self):
+        return self.naapurimaat
 
-    def get_flag_png(self):
+    def hae_lippu_png(self):
         pass       #en tiedä vielä miten tämä tehdään.
 
-    # Tarkistaa onko pelaajan arvaus oikein. Jos arvaus on oikein, niin palautetaan True ja jos ei ole oikein niin False.
-    def is_the_guess_right(self, guess):
+
+    def onko_arvaus_oikein(self, guess):
+        """Tarkistaa onko pelaajan arvaus oikein. Jos arvaus on oikein, niin palautetaan True ja jos ei ole oikein niin False.
+        Parametrina on pelaajan arvaus tekstinä"""
         arvaus = guess.rstrip()
-        if arvaus.upper() == self.name.upper():
+        if arvaus.upper() == self.nimi.upper() or arvaus.upper() == self.iso3166.upper():
             return True
         else:
             return False
 
-    # Palauttaa oikean vinkin sen perusteella montako arvausta pelaaja on tehnyt.
-    # Parametriksi annetaan siis kokonaisluku, joka kertoo, kuinka monta arvausta pelaaja on jo tehnyt.
-    def give_hint(self, nth_guess):
+
+    def hae_vihje(self, nth_guess):
+        """Palauttaa oikean vinkin sen perusteella montako arvausta pelaaja on tehnyt.
+        Parametriksi annetaan kokonaisluku, joka kertoo, kuinka monta arvausta pelaaja on jo tehnyt."""
         if nth_guess == 0:
             return None
         else:
             if 0 < nth_guess <= 5:
-                hint = self.hints[nth_guess - 1]
+                hint = self.vihjeet[nth_guess - 1]
                 return hint
             else:
                 return None
 
 
+    def hae_perustiedot(self):
+        """ Hakee maan perustiedot, mutta jättää vihjeet pois, koska niitä on turha näyttää pelaajalle enää lopuksi."""
+        sanakirja_maan_perustiedoista = self.__dict__.copy() #  lähde: "Can I get all attributes that were defined in the __init__ method of a class? [duplicate]", Stackoverflow, https://stackoverflow.com/questions/68384788/can-i-get-all-attributes-that-were-defined-in-the-init-method-of-a-class
+        sanakirja_maan_perustiedoista.pop("vihjeet") # poistetaan vihjeet #lähde: "Python Removing Items from a Dictionary", https://www.w3schools.com/python/gloss_python_remove_dictionary_items.asp
+        return sanakirja_maan_perustiedoista
+
+
     def __str__(self):
-        country_info = (f"The country is {self.name}. Its ISO-3166 code is {self.iso3166}.\n"
-                        f"{self.name}'s capital is {self.capital} and its population is {self.population} people.\n"
-                        f"The area of {self.name} is {self.area} km^2. The languages spoken in {self.name} "
-                        f"are {self.languages}. The country's independence year is {self.independence_year}.\n"
-                        f"The neighbouring countries of {self.name} are {self.neighbouring_countries}.")
+        tiedot_maasta = (f"The country is {self.nimi}. Its ISO-3166 code is {self.iso3166}.\n"
+                        f"{self.nimi}'s capital is {self.paakaupunki} and its population is {self.populaatio} people.\n"
+                        f"The area of {self.nimi} is {self.pinta_ala} km^2. The languages spoken in {self.nimi} "
+                        f"are {self.kielet}. The country's independence year is {self.itsenaisyysvuosi}.\n"
+                        f"The neighbouring countries of {self.nimi} are {self.naapurimaat}.")
 
-        return country_info
+        return tiedot_maasta
 
-
-#luodaan kaikki Maa-oliot maiden_tiedot_parser.py moduulissa olevan kaikkien_maiden_data -metodin avulla
-maiden_tiedot = kaikkien_maiden_data()
-
-def luodaan_maa_oliot(maiden_tiedot):
-    lista_maa_olioista = []
-
-    for maa in maiden_tiedot: #tässä maa on siis sanakirjassa yksi maa (tai tarkalleen maan nimi) eli tässä käydään kaikki sanakirjan avaimet läpi.
-        nimi = maa #esim ensimmäinen maa sanakirjassa on "Afghanistan"
-        iso3166 = maiden_tiedot[maa].get("abbreviation") #lähde: "Python Dictionary get() Method", W3schools, https://www.w3schools.com/python/ref_dictionary_get.asp
-        maanosa = maiden_tiedot[maa].get("continent")
-        paakaupunki = maiden_tiedot[maa].get("city")
-        populaatio = maiden_tiedot[maa].get("population")
-        pinta_ala = maiden_tiedot[maa].get("area")
-        kielet = maiden_tiedot[maa].get("languages")
-        itsenaisyysvuosi = maiden_tiedot[maa].get("independence")
-        naapurimaat = maiden_tiedot[maa].get("neighbouring countries")
-        vinkit = [maanosa, paakaupunki, kielet, naapurimaat, iso3166]
-
-        uusi_maa_olio = Maa(nimi, iso3166, maanosa, paakaupunki, populaatio, pinta_ala,
-                            kielet, itsenaisyysvuosi, naapurimaat, vinkit)
-        #lisätään listaan
-        lista_maa_olioista.append(uusi_maa_olio)
-
-    return lista_maa_olioista
 
 
 

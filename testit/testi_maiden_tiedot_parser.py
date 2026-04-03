@@ -1,5 +1,8 @@
-from maiden_tiedot_parser import kaikkien_maiden_data
-from maa import Maa, luodaan_maa_oliot
+from maiden_tiedot_parser import kaikkien_maiden_data, luodaan_maa_oliot
+from maa import Maa
+
+# Tämä moduuli on puhtaasti omaa kokeiluani varten. Näiden kokeilujen avulla nään nopeasti toimiiko
+# ohjelma oikein sekä palautetaanko ja tallennetaanko tiedot oikein. Voit kokeilla ajamalla tämän koodin.
 
 maiden_tiedot = kaikkien_maiden_data()
 
@@ -19,6 +22,14 @@ for maa in maiden_tiedot:
 maa_oliot_lista = luodaan_maa_oliot(maiden_tiedot)
 
 for maa in maa_oliot_lista:
-    if maa.get_name() == "Finland":
+    if maa.hae_nimi() == "Finland":
         print(maa)
+        print()
+        kaikkitiedot = maa.hae_perustiedot()
+        for tieto in kaikkitiedot:
+            print(tieto)
+            print(kaikkitiedot[tieto])
+            print()
+
+
 
