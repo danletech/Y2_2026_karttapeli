@@ -23,10 +23,10 @@ class Peli:
         maanosan_maat = []
         if continent == "world": #jos continent parametri on world niin peliin tulee mukaan kaikki maat
             self.arvattavat_maat = self.kaikki_maat.copy() #luodaan kaikki_maat -listasta kopio,
-                                                                # jotta ei sitten viitata samaan listaan
+                                                                # jotta ei viitata samaan listaan
         else:
             for maa_olio in self.kaikki_maat:
-                maanosa = maa_olio.continent
+                maanosa = maa_olio.maanosa
                 if maanosa == continent:
                     maanosan_maat.append(maa_olio)
 
@@ -41,9 +41,10 @@ class Peli:
             self.tamanhetkisen_maan_arvausyritykset = 0 #nollataan maan yritykset, jotta meille ei jää edellisen arvauksen yritykset voimaan
             self.tamanhetkisen_arvauksen_pisteet = 100 #palautetaan default pisteet, jotta meille ei jää edellisen arvauksen pisteet voimaan
             self.arvauksen_tila = False #nollataan arvauksen tila, jotta seuraava arvaus ei ole vahingossa jo valmiiksi oikein
+            return True # palautetaan True, eli maan arpominen tapahtui
 
         else:
-            print("Ei enää arvattavia maita.") # jos lista on tyhjä niin silloin pelaaja on arvannut kaikki maat
+            return False # palautetaan False, eli arpominen ei tapahtunut, eli pelaaja on arvannut kaikki maat
 
 
     def tarkistetaan_arvaus_ja_paivitetaan_arvaustiedot(self, arvaus):
@@ -56,14 +57,18 @@ class Peli:
                 if self.tamanhetkisen_maan_arvausyritykset == 5: # jos arvauksia on nyt viisi eli jos tuon ylemmän += 1 jälkeen arvaus oli viimeinen, niin tallennetaan arvausten määrä sanakirjaan
                     self.arvausten_maarat[self.nykyinen_maa.hae_nimi()] = 5
 
+                return False # palautetaan False eli arvaus meni väärin
+
             else: # Jos arvaus meni oikein
                 self.tamanhetkisen_maan_arvausyritykset += 1
                 self.kokonaispisteet += self.tamanhetkisen_arvauksen_pisteet # , lisätään kokonaispisteisiin ansaitut pisteet
                 self.arvauksen_tila = True
                 self.arvausten_maarat[self.nykyinen_maa.hae_nimi()] = self.tamanhetkisen_maan_arvausyritykset # , merkitään sanakirjaan, kuinka monta arvausta maan arvaamiseen meni
 
+                return True # palautetaan True eli arvaus meni oikein
 
-    def get_vihje(self):
+
+    def haetaan_vihje(self):
         """Antaa maata vastaavan vihjeen sen perusteella, montako arvausta pelaaja on tehnyt tätä maata kohden"""
         if not self.arvauksen_tila and self.tamanhetkisen_maan_arvausyritykset < 5: #eli jos arvaus on tällä hetkellä väärin eikä hän ole arvannut vielä viisi kertaa
             arvausyritysten_maara = self.tamanhetkisen_maan_arvausyritykset
