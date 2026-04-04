@@ -1,4 +1,4 @@
-import random, math
+import random
 from maa import Maa
 from maiden_tiedot_parser import kaikkien_maiden_data,  luodaan_maa_oliot
 
@@ -15,7 +15,8 @@ class Peli:
         self.tamanhetkisen_maan_arvausyritykset = 0
         self.tamanhetkisen_arvauksen_pisteet = 100
         self.nykyinen_maa = None #Maa-olio
-        self.arvauksen_tila = False #False edustaa tässä väärää arvausta eli sitä että maata ei ole vielä arvatta ja True että arvaus on mennyt oikein.
+        self.arvauksen_tila = False #False edustaa väärää arvausta eli sitä että maata ei ole vielä arvattu ja True että maa on arvattu
+        self.aika_loppunut = False #False edustaa sitä, että aikaa on vielä jäljellä
 
 
     def maanosa_jossa_pelataan(self, continent):
@@ -26,7 +27,7 @@ class Peli:
                                                                 # jotta ei viitata samaan listaan
         else:
             for maa_olio in self.kaikki_maat:
-                maanosa = maa_olio.maanosa
+                maanosa = maa_olio.hae_maanosa()
                 if maanosa == continent:
                     maanosan_maat.append(maa_olio)
 
@@ -34,10 +35,13 @@ class Peli:
 
 
     def arvotaan_maa(self):
+        """Arpoo yhden maan ja palauttaa oletustiedot yhdelle arvaukselle"""
         if len(self.arvattavat_maat) > 0:
             arvottu_maa = random.choice(self.arvattavat_maat)
             self.nykyinen_maa = arvottu_maa #nyt nykyinen maa on jokin Maa-olioda
             self.arvattavat_maat.remove(arvottu_maa) #poistetaan listalta, jotta sitä ei arvota myöhemmin uudestaan
+
+            # sen jälkeen kun maa on arvottu niin varmistetaan, ettei juuri arvotulle maalle jää edellisen maan tietoja:
             self.tamanhetkisen_maan_arvausyritykset = 0 #nollataan maan yritykset, jotta meille ei jää edellisen arvauksen yritykset voimaan
             self.tamanhetkisen_arvauksen_pisteet = 100 #palautetaan default pisteet, jotta meille ei jää edellisen arvauksen pisteet voimaan
             self.arvauksen_tila = False #nollataan arvauksen tila, jotta seuraava arvaus ei ole vahingossa jo valmiiksi oikein
@@ -48,7 +52,7 @@ class Peli:
 
 
     def tarkistetaan_arvaus_ja_paivitetaan_arvaustiedot(self, arvaus):
-        """ Tämä tarkastaa yhden arvausyrityksen ja huolehtii pisteiden lisäämisestä kokonaispisteisiin"""
+        """ Tämä tariastaa yhden arvausyrityksen ja huolehtii pisteiden lisäämisestä kokonaispisteisiin"""
         if self.tamanhetkisen_maan_arvausyritykset < 5 and self.arvauksen_tila == False: # jos pelaaja ei ole arvannut vielä viisi kertaa eikä ole arvannut oikein:
             if not self.nykyinen_maa.onko_arvaus_oikein(arvaus): # Jos arvaus meni väärin
                 self.tamanhetkisen_arvauksen_pisteet -= 20 #, vähennetään 20p default pisteistä
@@ -72,7 +76,7 @@ class Peli:
         """Antaa maata vastaavan vihjeen sen perusteella, montako arvausta pelaaja on tehnyt tätä maata kohden"""
         if not self.arvauksen_tila and self.tamanhetkisen_maan_arvausyritykset < 5: #eli jos arvaus on tällä hetkellä väärin eikä hän ole arvannut vielä viisi kertaa
             arvausyritysten_maara = self.tamanhetkisen_maan_arvausyritykset
-            vihje = self.nykyinen_maa.hae_vihje(arvausyritysten_maara)
+            vihje = self.nykyinen_maa.hae_vihje(arvausyritysten_maara) #Maa-luokan metodi hae_vihje palauttaa oikean vihjeen
             return vihje
         else:
             return None
@@ -88,8 +92,17 @@ class Peli:
         return maan_lippu
 
 
+    def asetetaan_aika_loppuneeksi(self):
+        self.aika_loppunut = True
+
+
     def peli_loppui(self):
-        pass # en tiedä vielä miten tämä tehdään.
+        if len(self.arvattavat_maat) == 0 or self.aika_loppunut: # jos arvattavia maita ei ole enää tai aika on loppunut
+            return True # peli loppui
+        else:
+            return False # peli jatkuu
+
+
 
 
 

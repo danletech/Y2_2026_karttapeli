@@ -18,6 +18,9 @@ class Maa:
     def hae_iso(self):
         return self.iso3166
 
+    def hae_maanosa(self):
+        return self.maanosa
+
     def hae_paakaupunki(self):
         return self.paakaupunki
 
@@ -39,8 +42,17 @@ class Maa:
     def hae_naapurimaat(self):
         return self.naapurimaat
 
-    def hae_lippu_png(self):
-        pass       #en tiedä vielä miten tämä tehdään.
+
+    def hae_maan_kuvan_tiedoston_polku(self):
+        maan_iso_koodi = self.iso3166.lower()
+        tiedoston_nimi = f"maiden kuvat/all/{maan_iso_koodi}/512.png"
+        return tiedoston_nimi
+
+
+    def hae_maan_lipun_tiedoston_polku(self):
+        maan_iso_koodi = self.iso3166.lower()
+        tiedoston_nimi = f"maiden liput/{maan_iso_koodi}.png"
+        return tiedoston_nimi #tätä pyqt voi käyttää hakeakseen kunkin maan lipun polun
 
 
     def onko_arvaus_oikein(self, guess):
