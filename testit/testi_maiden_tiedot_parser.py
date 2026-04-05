@@ -26,6 +26,7 @@ for maa in maa_oliot_lista:
         print(maa)
         print()
         kaikkitiedot = maa.hae_perustiedot()
+        print(kaikkitiedot)
         for tieto in kaikkitiedot:
             print(tieto)
             print(kaikkitiedot[tieto])

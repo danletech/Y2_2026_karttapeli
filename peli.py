@@ -52,7 +52,7 @@ class Peli:
 
 
     def tarkistetaan_arvaus_ja_paivitetaan_arvaustiedot(self, arvaus):
-        """ Tämä tariastaa yhden arvausyrityksen ja huolehtii pisteiden lisäämisestä kokonaispisteisiin"""
+        """ Tämä tarkistaa yhden arvausyrityksen ja huolehtii pisteiden lisäämisestä kokonaispisteisiin"""
         if self.tamanhetkisen_maan_arvausyritykset < 5 and self.arvauksen_tila == False: # jos pelaaja ei ole arvannut vielä viisi kertaa eikä ole arvannut oikein:
             if not self.nykyinen_maa.onko_arvaus_oikein(arvaus): # Jos arvaus meni väärin
                 self.tamanhetkisen_arvauksen_pisteet -= 20 #, vähennetään 20p default pisteistä
@@ -70,6 +70,8 @@ class Peli:
                 self.arvausten_maarat[self.nykyinen_maa.hae_nimi()] = self.tamanhetkisen_maan_arvausyritykset # , merkitään sanakirjaan, kuinka monta arvausta maan arvaamiseen meni
 
                 return True # palautetaan True eli arvaus meni oikein
+
+        return None # jos pelaaja on tehnyt jo 5 arvausta tai saanut arvauksen oikein
 
 
     def haetaan_vihje(self):

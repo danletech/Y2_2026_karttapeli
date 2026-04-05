@@ -42,27 +42,15 @@ class Maa:
     def hae_naapurimaat(self):
         return self.naapurimaat
 
-
     def hae_maan_kuvan_tiedoston_polku(self):
         maan_iso_koodi = self.iso3166.lower()
         tiedoston_nimi = f"maiden kuvat/all/{maan_iso_koodi}/512.png"
         return tiedoston_nimi
 
-
     def hae_maan_lipun_tiedoston_polku(self):
         maan_iso_koodi = self.iso3166.lower()
         tiedoston_nimi = f"maiden liput/{maan_iso_koodi}.png"
         return tiedoston_nimi #tätä pyqt voi käyttää hakeakseen kunkin maan lipun polun
-
-
-    def onko_arvaus_oikein(self, guess):
-        """Tarkistaa onko pelaajan arvaus oikein. Jos arvaus on oikein, niin palautetaan True ja jos ei ole oikein niin False.
-        Parametrina on pelaajan arvaus tekstinä"""
-        arvaus = guess.rstrip()
-        if arvaus.upper() == self.nimi.upper() or arvaus.upper() == self.iso3166.upper():
-            return True
-        else:
-            return False
 
 
     def hae_vihje(self, nth_guess):
@@ -83,6 +71,16 @@ class Maa:
         sanakirja_maan_perustiedoista = self.__dict__.copy() #  lähde: "Can I get all attributes that were defined in the __init__ method of a class? [duplicate]", Stackoverflow, https://stackoverflow.com/questions/68384788/can-i-get-all-attributes-that-were-defined-in-the-init-method-of-a-class
         sanakirja_maan_perustiedoista.pop("vihjeet") # poistetaan vihjeet #lähde: "Python Removing Items from a Dictionary", https://www.w3schools.com/python/gloss_python_remove_dictionary_items.asp
         return sanakirja_maan_perustiedoista
+
+
+    def onko_arvaus_oikein(self, guess):
+        """Tarkistaa onko pelaajan arvaus oikein. Jos arvaus on oikein, niin palautetaan True ja jos ei ole oikein niin False.
+        Parametrina on pelaajan arvaus tekstinä"""
+        arvaus = guess.rstrip()
+        if arvaus.upper() == self.nimi.upper() or arvaus.upper() == self.iso3166.upper():
+            return True
+        else:
+            return False
 
 
     def __str__(self):
