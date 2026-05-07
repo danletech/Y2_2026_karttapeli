@@ -528,10 +528,6 @@
         "continent": "Europe"
     },
     {
-        "country": "Marshall Islands",
-        "continent": "Oceania"
-    },
-    {
         "country": "Martinique",
         "continent": "North America"
     },
@@ -551,10 +547,7 @@
         "country": "Mexico",
         "continent": "North America"
     },
-    {
-        "country": "Micronesia, Federated States of",
-        "continent": "Oceania"
-    },
+
     {
         "country": "Moldova",
         "continent": "Europe"
@@ -894,10 +887,6 @@
     {
         "country": "Turks and Caicos Islands",
         "continent": "North America"
-    },
-    {
-        "country": "Tuvalu",
-        "continent": "Oceania"
     },
     {
         "country": "Uganda",

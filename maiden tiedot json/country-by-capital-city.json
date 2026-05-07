@@ -528,10 +528,6 @@
         "city": "Valletta"
     },
     {
-        "country": "Marshall Islands",
-        "city": "Dalap-Uliga-Darrit"
-    },
-    {
         "country": "Martinique",
         "city": "Fort-de-France"
     },
@@ -551,10 +547,7 @@
         "country": "Mexico",
         "city": "Ciudad de M"
     },
-    {
-        "country": "Micronesia, Federated States of",
-        "city": "Palikir"
-    },
+
     {
         "country": "Moldova",
         "city": "Chisinau"
@@ -894,10 +887,6 @@
     {
         "country": "Turks and Caicos Islands",
         "city": "Cockburn Town"
-    },
-    {
-        "country": "Tuvalu",
-        "city": "Funafuti"
     },
     {
         "country": "Uganda",

@@ -2,7 +2,7 @@ from maa import Maa
 
 import unittest
 
-class TestMaa(unittest.TestCase): #perintä kopioitu kierrokselta 6 t. 5
+class TestiMaa(unittest.TestCase): #perintä kopioitu kierrokselta 6 t. 5
 
     def setUp(self): #lähde https://realpython.com/python-unittest/
         # Luodaan jokin testiolio, olkoot suomi (tiedot karkeita ja kirjoitettu vain testejä varten)

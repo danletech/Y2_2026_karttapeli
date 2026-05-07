@@ -528,10 +528,6 @@
         "independence": 1964
     },
     {
-        "country": "Marshall Islands",
-        "independence": 1990
-    },
-    {
         "country": "Martinique",
         "independence": null
     },
@@ -551,10 +547,7 @@
         "country": "Mexico",
         "independence": 1810
     },
-    {
-        "country": "Micronesia, Federated States of",
-        "independence": 1990
-    },
+
     {
         "country": "Moldova",
         "independence": 1991
@@ -894,10 +887,6 @@
     {
         "country": "Turks and Caicos Islands",
         "independence": null
-    },
-    {
-        "country": "Tuvalu",
-        "independence": 1978
     },
     {
         "country": "Uganda",

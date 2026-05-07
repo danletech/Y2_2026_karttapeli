@@ -33,14 +33,14 @@ class Maa:
     def hae_kielet(self):
         return self.kielet
 
-    def hae_itsenaisyyspaiva(self):
+    def hae_itsenaisyysvuosi(self):
         return self.itsenaisyysvuosi
-
-    def hae_vihjeet(self):
-        return self.vihjeet
 
     def hae_naapurimaat(self):
         return self.naapurimaat
+
+    def hae_vihjeet(self):
+        return self.vihjeet
 
     def hae_maan_kuvan_tiedoston_polku(self):
         maan_iso_koodi = self.iso3166.lower()

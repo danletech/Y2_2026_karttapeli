@@ -25,31 +25,36 @@ class Vasen(QWidget):
         self.vasen_asetelma.addWidget(self.kuva)
         self.vasen_asetelma.addStretch() # työnnetään asetelmat ylöspäin, lähde: How to attach a changing list of widgets to the top of the QVBoxLayout in PyQT6?, Stackoverflow, https://stackoverflow.com/questions/77291072/how-to-attach-a-changing-list-of-widgets-to-the-top-of-the-qvboxlayout-in-pyqt6
 
-        # luodaan tekstikenttä johon pelaaja syötää arvauksensa
+        """Tekstikenttä"""
+        # luodaan tekstikenttä johon pelaaja syötää arvauksensa ja muokataan tekstieditorin ulkonäköä
         self.tekstieditori = QLineEdit(self)
         self.tekstieditori.setAlignment(Qt.AlignmentFlag.AlignHCenter) # teksti lähtee keskeltä eikä vasemmalta
         self.tekstieditori.setFixedSize(300,30) # lähde: [Solved] How to change initial size of QLineEdit, Qt Forum, https://forum.qt.io/topic/37280/solved-how-to-change-initial-size-of-qlineedit/5
-
-        # muokataan tekstieditorin ulkonäköä
-        self.tekstieditori.setStyleSheet("""
-            border-radius: 7px;
-        """)
-
-        # lisätään tekstieditori asetelmaan
+        self.tekstieditori.setStyleSheet("""border-radius: 7px;""")
         self.vasen_asetelma.addWidget(self.tekstieditori, alignment=Qt.AlignmentFlag.AlignHCenter) # lähde: "How do you change label alignment in PyQt6?", Stack Overflow, https://stackoverflow.com/questions/71756088/how-do-you-change-label-alignment-in-pyqt6
 
-        # luodaan nappi, jolla siirrytään arvaamaan seuraavaa maata
+        """Next country -nappi"""
+        # luodaan nappi, jolla siirrytään arvaamaan seuraavaa maata. tämän napin toiminta yhidstetään Gui-luokassa
         self.seuraava_maa_nappi = QPushButton("Next country")
         self.seuraava_maa_nappi.setFixedSize(300, 30)
-        self.vasen_asetelma.addWidget(self.seuraava_maa_nappi, alignment=Qt.AlignmentFlag.AlignHCenter)
-        self.seuraava_maa_nappi.clicked.connect(self.siirrytaan_seuraavaan_maahan) # kun pelaaja painaa nappia niin pelissä siirrytään seuraavaan maahan
         self.seuraava_maa_nappi.hide() # ei näytetä nappia vielä (vasta sitten kun arvaus menee oikein tai maata ei saada arvattua ollenkaan)
+        self.vasen_asetelma.addWidget(self.seuraava_maa_nappi, alignment=Qt.AlignmentFlag.AlignHCenter)
 
+        """Skip-nappi"""
+        # luodaan skip nappula:
+        self.skip_nappi = QPushButton("Skip", self)
+        self.skip_nappi.setFixedSize(70, 30)
+
+        # siirretään skip nappia visuaalisesti hyvään kohtaan
+        self.skip_nappi.move(550, 530)
+
+        """Virheilmoitus maan nimestä"""
         # luodaan varoitus siitä, että maata ei ole olemassa
         self.varoitus = QLabel("")
         self.varoitus.setStyleSheet("color: #ff2800") # lähde: "QLabel: set color of text and background", Stackoverflow, https://stackoverflow.com/questions/2749798/qlabel-set-color-of-text-and-background
         self.vasen_asetelma.addWidget(self.varoitus)
 
+        """Vihjelaatikko"""
         # luodaan vihjelaatikko
         self.vihjelaatikko = QWidget()
         self.vihjelaatikko.setFixedHeight(270)
@@ -132,7 +137,6 @@ class Vasen(QWidget):
             font-size: 18px;
         """)
 
-
         # laitetaan kaikki labelit asetteluun
         self.vihjelaatikon_sisapuoli.addWidget(self.vihjelaatikon_teksti)
         self.vihjelaatikon_sisapuoli.addWidget(self.eka_vihje)
@@ -152,6 +156,7 @@ class Vasen(QWidget):
 
         self.vihjelaatikko.setLayout(self.vihjelaatikon_sisapuoli) # laitetaan tuo QHBoxlayout vihjeboksin sisään
 
+        """Perustiedot-laatikko"""
         # luodaan perustiedoille laatikko, joka menee vihjelaatikon päälle
         # kun arvaus menee oikein tai kun maata ei saanut arvattua ollenkaan
         self.perustiedot_laatikko = QWidget()
@@ -231,25 +236,40 @@ class Vasen(QWidget):
         elif pelitila == "lippu":
             polku = os.path.join(tama_kansio, "maiden liput", f"{maan_iso3166_koodi}.png")
 
+
         kuva = QPixmap(polku)
-        kuva = kuva.scaledToHeight(500) # lähde: Y2 kierros 5
+
+        if pelitila == "kartta": # tehdään karttakuvasta hieman pienempi kuin lipuista
+            kuva = kuva.scaledToHeight(470) # lähde: Y2 kierros 5
+        else:
+            kuva = kuva.scaledToHeight(500)
 
         self.kuva.setPixmap(kuva) # lähde: Y2 kierros 5
 
 
     def siirrytaan_seuraavaan_maahan(self):
-        """Tämä metodi näyttää seuraavan arvattavan maan (kun pelaaja klikkaa ."""
+        """Tämä arpoo seuraavan maan ja jos arpominen onnistuu niin jatketaan peliä.
+         Jos ei niin kaikki maat on arvattu.."""
 
-        self.seuraava_maa_nappi.hide() # ei näytetä nappia silloin kun ollaan siirrytty uuteen arvattavaan maahan
-        self.perustiedot_laatikko.hide() # ei näytetä maan perustietoja silloin kun pelaaja on arvaamassa
-        self.tekstieditori.show() # näytetään tekstieditori jotta pelaaja voi arvata
-        self.tekstieditori.setFocus() # laitetaan hiiri heti takaisin tekstieditoriin, jotta pelaajan ei itse tarvitse tehdä sitä manuaalisesti
-        self.vihjelaatikko.show() # näytetään vihjelaatikko
-        self.piilotetaan_vihjeet_ja_naytetaan_teksti() # ei näytetä vihjeitä vielä vaan vasta se "Guess the country" teksti
+        maan_arpominen = self.peli.arvotaan_maa() # arvotaan uusi maa ja tarkistetaan palauttaako se True vai False
+                                            # jos True niin maita on vielä arvattavana ja peli jatkuu.
+                                            # jos taas False niin maita ei ole enää arvattavana jolloin lopetetaan peli
+        if maan_arpominen:
+            self.seuraava_maa_nappi.hide() # ei näytetä nappia silloin kun ollaan siirrytty uuteen arvattavaan maahan
+            self.perustiedot_laatikko.hide() # ei näytetä maan perustietoja silloin kun pelaaja on arvaamassa
+            self.tekstieditori.show() # näytetään tekstieditori jotta pelaaja voi arvata
+            self.tekstieditori.setFocus() # laitetaan hiiri heti takaisin tekstieditoriin, jotta pelaajan ei itse tarvitse tehdä sitä manuaalisesti
+            self.vihjelaatikko.show() # näytetään vihjelaatikko
+            self.skip_nappi.show() # näytetäään skip-nappi
+            self.piilotetaan_vihjeet_ja_naytetaan_teksti() # ei näytetä vihjeitä vielä vaan vasta se "Guess the country" teksti
 
-        # arvotaan uusi maa ja näytetään se
-        self.peli.arvotaan_maa()
-        self.naytetaan_karttakuva_tai_lippu(self.peli.pelitila)
+            # näytetään arvotun maan kuva
+            self.naytetaan_karttakuva_tai_lippu(self.peli.pelitila)
+
+            return True # eli siis päästään siirtymään seuraavaan maahan.
+
+        else:
+            return False # ei päästy siirtymään seuraavaan maahan
 
 
     def piilotetaan_vihjeet_ja_naytetaan_teksti(self):
@@ -273,31 +293,46 @@ class Vasen(QWidget):
         Tätä metodia kutsutaan vain silloin kun arvaus on mennyt väärin.
         Ks. metodin tarkistetaan_tekstikentan_arvaus... True ja False kohdat."""
 
-        arvausten_maara = self.peli.tamanhetkisen_maan_arvausyritykset
+        arvausten_lkm = self.peli.tamanhetkisen_maan_arvausyritykset
         seuraava_vihje = self.peli.haetaan_vihje()
 
-        if arvausten_maara == 0 or arvausten_maara is None: # jos arvauksia ei ole tehty vielä tai jos kaikki arvaukset on käytetty
+        if arvausten_lkm == 0 or arvausten_lkm is None: # jos arvauksia ei ole tehty vielä tai jos kaikki arvaukset on käytetty
             self.vihjelaatikon_sisapuoli.addWidget(self.vihjelaatikon_teksti)
 
-        elif arvausten_maara == 1:
+        elif arvausten_lkm == 1:
             # tässä kohtaa pelaaja on siis arvannut yhden kerran (väärin), joten näytetään eka vihje
             self.vihjelaatikon_teksti.hide()  # piilotetaan Guess the country -teksti
             self.eka_vihje.setText(f"Continent: {seuraava_vihje}") # asetetaan ekan vihjeen teksti ekaan boksiin
             self.eka_vihje.show()
 
-        elif arvausten_maara == 2:
+        elif arvausten_lkm == 2:
             self.toka_vihje.setText(f"Capital city: {seuraava_vihje}")
             self.toka_vihje.show()
 
-        elif arvausten_maara == 3:
-            self.kolmas_vihje.setText(f"Languages spoken: {seuraava_vihje}")
+        elif arvausten_lkm == 3:
+            merkkijono_kielista = str(seuraava_vihje)
+
+            # lyhennetään merkkijonoa kielistä jos se on liian pitkä mahtumaan vihjelaatikkoon.
+            if len(merkkijono_kielista) > 48:
+                vihje_kielista = merkkijono_kielista[:45] + "..."
+            else:
+                vihje_kielista = merkkijono_kielista
+
+            self.kolmas_vihje.setText(f"Languages spoken: {vihje_kielista}")
             self.kolmas_vihje.show()
 
-        elif arvausten_maara == 4:
-            self.neljas_vihje.setText(f"Neighbouring countries: {seuraava_vihje}")
+        elif arvausten_lkm == 4:
+            merkkijono_naapurimaista = str(seuraava_vihje)
+
+            if len(merkkijono_naapurimaista) > 48:
+                vihje_naapurimaista = merkkijono_naapurimaista[:45] + "..."
+            else:
+                vihje_naapurimaista = merkkijono_naapurimaista
+
+            self.neljas_vihje.setText(f"Neighbouring countries: {vihje_naapurimaista}")
             self.neljas_vihje.show()
 
-        elif arvausten_maara == 5:
+        elif arvausten_lkm == 5:
             self.viides_vihje.setText(f"First letter: {seuraava_vihje}")
             self.viides_vihje.show()
 
@@ -308,11 +343,21 @@ class Vasen(QWidget):
         näkyy pelaajalle tekstinä ja jos maita on sitä enemmän niin loput tooltipin viestikentässä.
         Nämä tiedot päivitetään tietysti perustiedot-boksiin, joka lopulta näytetään .show()-metodin avulla."""
 
-        populaatio = int(self.peli.nykyinen_maa.hae_populaatio()) # lähde: "Space as a thousands separator in the format specification mini-language" (kohta: Nice Zombies -käyttäjän vastaus), Python.org, https://discuss.python.org/t/space-as-a-thousands-separator-in-the-format-specification-mini-language/72918/3
-        populaatio = f"{populaatio:_}".replace("_", " ")
+        populaatio_data = self.peli.nykyinen_maa.hae_populaatio()
+        pinta_ala_data = self.peli.nykyinen_maa.hae_pinta_ala()
 
-        pinta_ala = int(self.peli.nykyinen_maa.hae_pinta_ala())
-        pinta_ala = f"{pinta_ala:_}".replace("_", " ")
+
+        if populaatio_data is not None:
+            populaatio = int(populaatio_data) # lähde: "Space as a thousands separator in the format specification mini-language" (kohta: Nice Zombies -käyttäjän vastaus), Python.org, https://discuss.python.org/t/space-as-a-thousands-separator-in-the-format-specification-mini-language/72918/3
+            populaatio = f"{populaatio:_}".replace("_", " ")
+        else:
+            populaatio = "No data on population"
+
+        if pinta_ala_data is not None:
+            pinta_ala = int(pinta_ala_data)
+            pinta_ala = f"{pinta_ala:_}".replace("_", " ")
+        else:
+            pinta_ala = "No data on area"
 
         self.perustiedot_maan_nimi.setText(f"Country: {self.peli.nykyinen_maa.hae_nimi()}") # asetaan qlabel tekstiin maan nimi
         self.perustiedot_maan_iso3166.setText(f"ISO 3166 code: {self.peli.nykyinen_maa.hae_iso()}")
@@ -325,15 +370,12 @@ class Vasen(QWidget):
         kielet = self.peli.nykyinen_maa.hae_kielet()
         naapurit = self.peli.nykyinen_maa.hae_naapurimaat()
 
-
-
-        # jos maassa puhutaan yli viittä kieltä niin näytetään niistä ensimmäiset viisi ja loput tooltip avulla
-
-        if len(kielet) > 5:
-            lista_viisi_kielta = kielet[:5]
+        # jos maassa puhutaan yli kolmea kieltä niin näytetään niistä ensimmäiset kolme ja loput tooltip avulla
+        if len(kielet) > 3:
+            lista_viisi_kielta = kielet[:3]
             merkkijono_kielista = ",  ".join(lista_viisi_kielta)
 
-            lista_loput_kielista = kielet[5:]
+            lista_loput_kielista = kielet[3:]
             merkkijono_lopuista_kielista = ", ".join(lista_loput_kielista)
             loput_kielet_maara = len(lista_loput_kielista)
 
@@ -344,7 +386,6 @@ class Vasen(QWidget):
             # lähde: PyQt: "Changing cursor when hovering a button", Stack Overflow, https://stackoverflow.com/questions/36725245/pyqt-changing-cursor-when-hovering-a-button
             # ja "How to use Different Cursors in PyQt (Default and Custom)", YouTube, https://www.youtube.com/watch?v=nVDR7TEAeyc
 
-
         else:
             # tehdään tooltipin tekstistä tyhjä koska kieliä on alle viisi
             merkkijono_kielista = ",  ".join(kielet) # How would you make a comma-separated string from a list of strings?, Stack Overflow, https://stackoverflow.com/questions/44778/how-would-you-make-a-comma-separated-string-from-a-list-of-strings
@@ -354,12 +395,12 @@ class Vasen(QWidget):
         self.perustiedot_maan_kielet.setText(f"Languages: {merkkijono_kielista}")
 
 
-        # jos maalla on yli viisi naapurimaata niin näytetään ensimmäiset viisi niistä ja loput tooltip avulla
-        if len(naapurit) > 5:
-            lista_viisi_naapurimaata = naapurit[:5]
+        # jos maalla on yli kolme naapurimaata niin näytetään ensimmäiset kolme niistä ja loput tooltip avulla
+        if len(naapurit) > 3:
+            lista_viisi_naapurimaata = naapurit[:3]
             merkkijono_naapureista = ",  ".join(lista_viisi_naapurimaata)
 
-            lista_loput_naapurimaista = naapurit[5:]
+            lista_loput_naapurimaista = naapurit[3:]
             merkkijono_lopuista_naapurimaista = ", ".join(lista_loput_naapurimaista)
             loput_naapurimaat_maara = len(lista_loput_naapurimaista)
 
@@ -375,6 +416,4 @@ class Vasen(QWidget):
         self.perustiedot_maan_naapurit.setText(f"Neighbouring countries: {merkkijono_naapureista}")
 
         self.perustiedot_laatikko.show() # perustiedot-boksi pitää manuaalisesti näyttää koska se alunperin piilotettin .hide() metodilla.
-
-
 

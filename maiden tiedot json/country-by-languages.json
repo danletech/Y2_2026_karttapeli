@@ -653,17 +653,6 @@
         ]
     },
     {
-        "country": "Micronesia, Federated States of",
-        "languages": [
-            "Kosrean",
-            "Mortlock",
-            "Pohnpei",
-            "Trukese",
-            "Wolea",
-            "Yap"
-        ]
-    },
-    {
         "country": "Gabon",
         "languages": [
             "Fang",
@@ -1211,13 +1200,6 @@
             "Spanish",
             "Yucatec",
             "Zapotec"
-        ]
-    },
-    {
-        "country": "Marshall Islands",
-        "languages": [
-            "English",
-            "Marshallese"
         ]
     },
     {
@@ -1933,14 +1915,6 @@
             "Arabic",
             "Kurdish",
             "Turkish"
-        ]
-    },
-    {
-        "country": "Tuvalu",
-        "languages": [
-            "English",
-            "Kiribati",
-            "Tuvalu"
         ]
     },
     {

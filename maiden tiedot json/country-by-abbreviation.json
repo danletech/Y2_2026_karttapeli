@@ -536,10 +536,6 @@
         "abbreviation": "MT"
     },
     {
-        "country": "Marshall Islands",
-        "abbreviation": "MH"
-    },
-    {
         "country": "Martinique",
         "abbreviation": "MQ"
     },
@@ -559,10 +555,7 @@
         "country": "Mexico",
         "abbreviation": "MX"
     },
-    {
-        "country": "Micronesia, Federated States of",
-        "abbreviation": "FM"
-    },
+
     {
         "country": "Moldova",
         "abbreviation": "MD"
@@ -902,10 +895,6 @@
     {
         "country": "Turks and Caicos Islands",
         "abbreviation": "TC"
-    },
-    {
-        "country": "Tuvalu",
-        "abbreviation": "TV"
     },
     {
         "country": "Uganda",

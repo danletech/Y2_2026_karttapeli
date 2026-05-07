@@ -17,8 +17,17 @@ class Oikea(QWidget):
 
         # varataan tilaa ajastimelle
         self.aikarajoitus = QLabel("Tähän tulee ajastin.")
+        self.aikarajoitus.setStyleSheet("""
+                color: white;
+                background-color: #555555;
+                border: 2px solid #a9a9a9; 
+                border-radius: 7px;
+                font-size: 16px;
+                font-weight: bold;
+        """)
         self.oikea_asetelma.addWidget(self.aikarajoitus, alignment=Qt.AlignmentFlag.AlignLeft)
 
+        """Pisteboksi"""
         # luodaan pisteille näkymä
         self.pisteet = QLabel("Points: 0")
         self.pisteet.setFixedSize(150, 40)
@@ -34,7 +43,7 @@ class Oikea(QWidget):
         # lisätään pisteboksi asetelmaan
         self.oikea_asetelma.addWidget(self.pisteet, alignment=Qt.AlignmentFlag.AlignRight)
 
-
+        """Progressbar"""
         # luodaan kehityspalkki ja lisätään asetelmaa
         self.kehityspalkki = QProgressBar()
         self.kehityspalkki.setFixedSize(300, 30)
@@ -64,7 +73,7 @@ class Oikea(QWidget):
         # asetetaan kehityspalkin aluksi nolla, jolloin siinä lukee 0%
         self.kehityspalkki.setValue(0)
 
-
+        """Lista arvatuista maista"""
         # luodaan laatikko jossa on qlistawidget elementtejä ja lisätään asetelmaan
         self.lista_arvatuista_boksi = QWidget()
         self.lista_arvatuista_boksi.setFixedHeight(615)
@@ -116,7 +125,7 @@ class Oikea(QWidget):
 
         # luodaan otsikkoelementit
         self.otsikko1 = QLabel("✅ 1st try")
-        self.otsikko2 = QLabel("🟨 2-5 tries")
+        self.otsikko2 = QLabel("🟨 2-6 tries")
         self.otsikko3 = QLabel("❌ Failed to guess")
 
         # ja muokataan niiden ulkonäköä
@@ -198,15 +207,36 @@ class Oikea(QWidget):
     def paivitetaan_pisteet(self):
         """Päivittää pistenäkymän."""
         tamanhetkiset_pisteet = self.peli.kokonaispisteet
+
+        if tamanhetkiset_pisteet < 0:
+            self.pisteet.setStyleSheet("""
+                color: #ff2800;
+                background-color: #555555;
+                border: 2px solid #a9a9a9; 
+                border-radius: 7px;
+                border-color: #ff2800;
+                font-size: 16px;
+                font-weight: bold;
+            """)
+
+        else:
+            self.pisteet.setStyleSheet("""
+                color: white;
+                background-color: #555555;
+                border: 2px solid #a9a9a9; 
+                border-radius: 7px;
+                font-size: 16px;
+                font-weight: bold;
+            """)
         self.pisteet.setText(f"Points: {tamanhetkiset_pisteet}")
 
 
     def paivitetaan_kehityspalkki(self):
         """Päivittää kehityspalkin ulkonäköä. tarkistetaan_tekstikentan_arvaus_ja_paivitetaan_nakyma -metodi kutsuu tätä sitä mukaan kun pelaaja on arvannut maan"""
         uusi_arvo = self.kehityspalkki.value() + 1
-        self.kehityspalkki.setValue(uusi_arvo)
+        maksimi = self.kehityspalkki.maximum()
 
-        if uusi_arvo == self.kehityspalkki.maximum():
+        if uusi_arvo == maksimi:
             # jos pelaaja on arvannut kaikki maat
             # niin muutetaan palkin näkymää siten, että koko palkki on ns. täynnä vihreää väriä
             self.kehityspalkki.setStyleSheet("""
@@ -226,8 +256,8 @@ class Oikea(QWidget):
             }
         """)
 
-        elif uusi_arvo > 50:
-            # muutetaan kehityksen väri vihreäksi
+        elif uusi_arvo > (maksimi // 2):
+            # muutetaan kehityksen väri vihreäksi kun puolet kehityksestä on tehty
             self.kehityspalkki.setStyleSheet("""
             QProgressBar {
                 color: white;
@@ -240,12 +270,16 @@ class Oikea(QWidget):
                 background-color: grey;
             }
             QProgressBar::chunk {
+                width: 2px;
                 background-color: green; 
                 margin: 1px;
                 border-radius: 3px;
             }
         """)
         # lähde: Create a Modern Style ProgressBar in PyQt6 | PyQt6 Tutorial, YouTube, https://www.youtube.com/watch?v=ms2Ey_SzZZc
+
+        self.kehityspalkki.setValue(uusi_arvo) # annetaan kehityspalkin prosenttiarvoksi uusi arvo
+
 
     def nollataan_kehityspalkki(self):
         """Nollaa kehityspalkin. """
@@ -261,7 +295,7 @@ class Oikea(QWidget):
             merkkijono = f"- {maan_nimi}"
             self.yksi_arvaus_boksi.addItem(merkkijono)
 
-        elif arvaus_oikein and 2 <= yrityskerrat <= 5: # jos maa arvattaan oikein 2-5 arvauksen välillä
+        elif arvaus_oikein and 2 <= yrityskerrat <= 6: # jos maa arvattaan oikein 2-5 arvauksen välillä
             merkkijono = f"- {maan_nimi} ({yrityskerrat} tries)"
             self.kaksi_viiva_viisi_arvausta_boksi.addItem(merkkijono)
 

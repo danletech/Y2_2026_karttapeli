@@ -69,7 +69,7 @@ def kaikkien_maiden_data():
 
 
 def luodaan_maa_oliot(maiden_tiedot):
-    """"Tämä metodi luo Maa-oliot. Parametriksi annetaan kaikkien maiden tiedot. Maa-oliot luodaan pelin alussa siis vain kerran"""
+    """"Tämä metodi luo Maa-oliot. Parametriksi annetaan kaikkien maiden tiedot sanakirjassa. Maa-oliot luodaan pelin alussa siis vain kerran"""
     lista_maa_olioista = []
 
     for maa in maiden_tiedot: #tässä maa on siis sanakirjassa yksi maa (tai tarkalleen maan nimi) eli tässä käydään kaikki sanakirjan avaimet läpi.
@@ -79,12 +79,39 @@ def luodaan_maa_oliot(maiden_tiedot):
         paakaupunki = maiden_tiedot[maa].get("city")
         populaatio = maiden_tiedot[maa].get("population")
         pinta_ala = maiden_tiedot[maa].get("area")
-        kielet = maiden_tiedot[maa].get("languages")
         itsenaisyysvuosi = maiden_tiedot[maa].get("independence")
-        naapurimaat = maiden_tiedot[maa].get("neighbouring countries")
-        vinkit = [maanosa, paakaupunki, kielet, naapurimaat, iso3166]
+        maan_nimen_eka_kirjain = nimi[0]
 
-        uusi_maa_olio = Maa(nimi, iso3166, maanosa, paakaupunki, populaatio, pinta_ala, kielet, itsenaisyysvuosi, naapurimaat, vinkit)
+        kielet = maiden_tiedot[maa].get("languages") # json tiedostoissa kielet ja naapurimaat on tallennettu listoihin
+        naapurimaat = maiden_tiedot[maa].get("neighbouring countries") # eli "kielet" ja "naapurimaat" on siis listoja
+
+        # tarkistetaan onko kielet-listalla dataa ja tehdään siitä merkkijono perustietojen näyttämistä varten
+        if kielet is not None: # jos kielet listalla on kieliä eikä ole tyhjä lista
+            kielet_lista = kielet
+        else: # jos lista on tyhjä niin asetetaan kielien listaksi tyhjä lista
+            kielet_lista = []
+
+        if len(kielet_lista) > 0: # jos kielet listalla on kieliä
+            kielet_merkkijonona = ", ".join(kielet_lista) # tehdään listan jäsenistä merkkijono
+        else:
+            kielet_merkkijonona = "No data on languages" # jos lista on jostain syystä tyhjä niin annetaan perustietoihin datan puutteesta
+
+        # sama naapurimaille
+        if naapurimaat is not None:
+            naapurimaat_lista = naapurimaat
+        else:
+            naapurimaat_lista = []
+
+        if len(naapurimaat_lista) > 0: # jos lista ei ole tyhjä
+            naapurimaat_merkkijonona = ", ".join(naapurimaat)
+        else:
+            naapurimaat_merkkijonona = "No neighbouring countries"
+
+
+        # luodaan lista johon tallennetaan kaikki maan vinkit
+        vinkit = [maanosa, paakaupunki, kielet_merkkijonona, naapurimaat_merkkijonona, maan_nimen_eka_kirjain]
+
+        uusi_maa_olio = Maa(nimi, iso3166, maanosa, paakaupunki, populaatio, pinta_ala, kielet_lista, itsenaisyysvuosi, naapurimaat_lista, vinkit)
 
         lista_maa_olioista.append(uusi_maa_olio)
 
