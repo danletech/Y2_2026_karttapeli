@@ -1,11 +1,6 @@
 import random
-from maa import Maa
-from maiden_tiedot_parser import kaikkien_maiden_data,  luodaan_maa_oliot
 
 class Peli:
-    #luodaan ensin kaikki Maa-oliot, jotta Peli-luokka voi hyödyntää maita.
-    maiden_data = kaikkien_maiden_data()
-    lista_maa_oliot = luodaan_maa_oliot(maiden_data)
 
     def __init__(self, lista_maa_oliot):
         self.kaikki_maat = lista_maa_oliot #tämä pysyy muuttumattomana eli tässä listassa on aina kaikki maa-oliot
@@ -120,7 +115,7 @@ class Peli:
     def maa_skipattu(self):
         """Asettaa maan arvausyritykset kuuteen, jotta skipattu maa menisi Failed to guess -listaan"""
         self.tamanhetkisen_maan_arvausyritykset = 6
-        self.arvausten_maarat[self.nykyinen_maa.hae_nimi()] = 6
+        self.arvausten_maarat[self.nykyinen_maa.hae_nimi()] = 0
 
         # skippaus vähentää 10p pisteistä niin vähennetään se kokonaispisteistä
         self.kokonaispisteet -= 10
