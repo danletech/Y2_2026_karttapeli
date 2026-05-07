@@ -267,7 +267,7 @@ class Gui(QMainWindow):
 
         lista_oikein_arvatuista_maista = []
         for maa in sanakirja:
-            if sanakirja[maa] < 0:
+            if sanakirja[maa] > 0:
                 lista_oikein_arvatuista_maista.append(maa)
 
         arvattujen_maiden_maara = len(lista_oikein_arvatuista_maista)
