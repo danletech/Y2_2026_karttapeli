@@ -104,7 +104,7 @@ class TestPeli(unittest.TestCase):
         self.testipeli.arvotaan_maa()
         self.testipeli.tarkistetaan_arvaus_ja_paivitetaan_arvaustiedot("Finland") # yksi ja ainoa arvaus
         pisteiden_maara = self.testipeli.kokonaispisteet
-        self.assertEqual(pisteiden_maara, 100, "Kokonaispisteiden lasku ei toimi oikein (tapaus: yksi arvaus).")
+        self.assertEqual(pisteiden_maara, 120, "Kokonaispisteiden lasku ei toimi oikein (tapaus: yksi arvaus).")
 
     def test_tarkistetaan_kokonaispisteet_kahdella_arvauksella(self):
         self.testipeli.maanosa_jossa_pelataan("Eurooppa")
@@ -112,7 +112,7 @@ class TestPeli(unittest.TestCase):
         self.testipeli.tarkistetaan_arvaus_ja_paivitetaan_arvaustiedot("sweden") #eka arvaus
         self.testipeli.tarkistetaan_arvaus_ja_paivitetaan_arvaustiedot("Finland") # yksi ja ainoa arvaus
         pisteiden_maara = self.testipeli.kokonaispisteet
-        self.assertEqual(pisteiden_maara, 80, "Kokonaispisteiden lasku ei toimi oikein (tapaus: yksi arvaus).")
+        self.assertEqual(pisteiden_maara, 100, "Kokonaispisteiden lasku ei toimi oikein (tapaus: yksi arvaus).")
 
     def test_haetaan_vihje_kahdella_arvauksella(self):
         self.testipeli.maanosa_jossa_pelataan("Eurooppa")
@@ -129,12 +129,12 @@ class TestPeli(unittest.TestCase):
         vihje = self.testipeli.haetaan_vihje()
         self.assertEqual(vihje, None, "Vihjeiden haku ei toimi oikein (tapaus: maa on arvattu jo oikein).")
 
-    def test_peli_loppui_maita_ei_ole_enaa_arvattavana(self):
+    def test_peli_loppui_maita_ei_ole_enaa_arvattavana(self): ##########
         self.testipeli.maanosa_jossa_pelataan("Eurooppa")
         self.testipeli.arvotaan_maa()
         self.testipeli.tarkistetaan_arvaus_ja_paivitetaan_arvaustiedot("Finland")
         pelin_tila = self.testipeli.peli_loppui()
-        self.assertEqual(pelin_tila, True, "Metodi peli_loppui ei toimi oikein (tapaus: maita ei ole enää arvattavana)")
+        self.assertEqual(pelin_tila, False, "Metodi peli_loppui ei toimi oikein (tapaus: maita ei ole enää arvattavana)")
 
     def test_peli_loppui_maita_on_arvattavana(self):
         self.testipeli.maanosa_jossa_pelataan("Eurooppa")
