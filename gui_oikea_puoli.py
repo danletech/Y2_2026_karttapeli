@@ -292,14 +292,14 @@ class Oikea(QWidget):
         maan_nimi = f"{self.peli.nykyinen_maa.hae_nimi()}"
 
         if arvaus_oikein and yrityskerrat == 1: # jos maa arvattiin oikein ekalla yrityksellä
-            merkkijono = f"- {maan_nimi}"
+            merkkijono = f"{maan_nimi}"
             self.yksi_arvaus_boksi.addItem(merkkijono)
 
         elif arvaus_oikein and 2 <= yrityskerrat <= 6: # jos maa arvattaan oikein 2-5 arvauksen välillä
-            merkkijono = f"- {maan_nimi} ({yrityskerrat} tries)"
+            merkkijono = f"{maan_nimi} ({yrityskerrat} tries)"
             self.kaksi_viiva_viisi_arvausta_boksi.addItem(merkkijono)
 
         else: # jos maata ei onnistuttu arvaamaan
-            merkkijono = f"- {maan_nimi}"
+            merkkijono = f"{maan_nimi}"
             self.ei_arvattu_boksi.addItem(merkkijono)
 
