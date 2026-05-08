@@ -23,8 +23,7 @@ Olen rakentanut Olio-ohjelmoinnilla Interaktiivisen karttapelin. Pelissä
 * main.py käynnistää pelin
 * peli.py hoitaa pelin sisäisen logiikan. 
 * gui_aloitusikkuna.py näyttää aloitusikkunan, jossa pelaaja valitsee pelimoodit
-* gui.py (sekä gui_vasen_puoli.py ja gui_oikea_puoli.py) hoitaa peli-ikkunan näkymän
-* gui_lopetusikkuna näyttää lopetusikkunan, jossa näkyy pisteet ja arvatuiden maiden määrän
+* gui.py (sekä gui_vasen_puoli.py ja gui_oikea_puoli.py) hoitaa peli-ikkunan näkymän ja lopetusikkunan
 * testi-kansiossa testimoduulit varmistavat parserin, maa-olion ja peli-olion oikean toiminnan
 
 ## Käyttöohje
