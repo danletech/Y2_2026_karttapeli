@@ -25,6 +25,5 @@ def main():
     sys.exit(applikaatio.exec())
 
 
-
 if __name__ == '__main__':
     main()
