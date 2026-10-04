@@ -239,6 +239,7 @@ class Vasen(QWidget):
 
         kuva = QPixmap(polku)
 
+
         if pelitila == "kartta": # tehdään karttakuvasta hieman pienempi kuin lipuista
             kuva = kuva.scaledToHeight(470) # lähde: Y2 kierros 5
         else:

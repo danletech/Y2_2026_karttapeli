@@ -27,7 +27,6 @@ def kaikkien_maiden_data():
 
         with open(polku_tiedostoon, "r") as tiedosto_maat:
             tiedoston_data = json.load(tiedosto_maat) #lähde: "Read, Write and Parse JSON using Python", Geeksforgeeks, https://www.geeksforgeeks.org/python/read-write-and-parse-json-using-python/
-
             for sanakirja in tiedoston_data: #tiedoston_data on lista ja sen sisällä on sanakirjoja on esim: {"country": "Afghanistan", "continent": "Asia"}
                 maan_nimi = sanakirja["country"]
 
