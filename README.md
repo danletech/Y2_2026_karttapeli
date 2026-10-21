@@ -1,4 +1,43 @@
-# Kartta-arvauspeli (2026)
+# World Map Guessing Game (Kartta-arvauspeli)
+
+An interactive geography game built with Python and PyQt6. Guess countries from map outlines or flags, get hints after wrong answers, read country facts and race against a timer.
+
+![Screenshot](dokumentaatio/kuvakaappaus_pelista.png)
+
+## Quick start
+
+```bash
+git clone https://github.com/danletech/Y2_2026_karttapeli.git
+cd Y2_2026_karttapeli
+python3 -m venv .venv
+source .venv/bin/activate   # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+python main.py
+```
+
+## How to play
+
+- Choose a continent, play with map images or flags, and pick a difficulty level (it changes the timer length).
+- Guess the country shown. Points per attempt: 120 / 100 / 80 / 60 / 40 / 20. No points if you fail to guess it.
+- Skipping a country costs 10 points.
+- The game ends when the time runs out or when all countries are guessed.
+
+## Technical overview
+
+- **Object-oriented design:** country data is read from several JSON files by a parser (`maiden_tiedot_parser.py`) and turned into `Maa` (country) objects with attributes such as capital, languages and neighbours.
+- **Game logic** (`peli.py`) is separated from the **PyQt6 GUI** (`gui_aloitusikkuna.py`, `gui.py`, `gui_vasen_puoli.py`, `gui_oikea_puoli.py`).
+- Extras: timer with colour changes, hint box, skip button, typo detection for non-existent countries, progress bar, score box and lists of guessed countries.
+- Unit tests for the parser, country and game classes are in `testit/`.
+
+## Known limitations
+
+- The game window has a fixed size, so it may look different on different monitors.
+- Marshall Islands, Micronesia and Tuvalu are excluded because they had no map image.
+- Country facts are shown after a guess; clicking countries on the map is not supported.
+
+*Author: Dan Le. Suomenkielinen kuvaus alla / Finnish description below.*
+
+---# Kartta-arvauspeli (2026)
 * Kartta-arvauspeli on interaktiivinen peli, jossa pelaaja arvaa maita, saa vinkkejä väärien vastausten jälkeen, saa lukea maan perustiedot, ansaita pisteitä ja haastaa itseään aikaa vastaan. 
 
 ## Tekijä
