@@ -37,7 +37,7 @@ python main.py
 
 *Author: Dan Le. Suomenkielinen kuvaus alla / Finnish description below.*
 
----# Kartta-arvauspeli (2026)
+# Kartta-arvauspeli (2026)
 * Kartta-arvauspeli on interaktiivinen peli, jossa pelaaja arvaa maita, saa vinkkejä väärien vastausten jälkeen, saa lukea maan perustiedot, ansaita pisteitä ja haastaa itseään aikaa vastaan. 
 
 ## Tekijä
